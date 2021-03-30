@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Threading.Tasks;
 using WebApiRest.Models;
 using WebApiRest.Repositories.Base;
 using WebApiRest.Services;

@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApiRest.Services;
 
 namespace WebApiRest.Repositories.Base
 {
-    public abstract class Repository<T> : IRepository<T> where T: class, new()
+    public abstract class Repository<T> : IRepository<T> where T : class, new()
     {
-        private readonly DatabaseService _database;
-        private readonly DbSet<T> _model;
+        protected readonly DatabaseService _database;
+        protected readonly DbSet<T> _model;
         public Repository(DatabaseService database)
         {
             if (database is null)
@@ -24,6 +27,20 @@ namespace WebApiRest.Repositories.Base
             await _model.AddAsync(model);
             await SaveAsync();
             return model;
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> where)
+        {
+            return await _model.AsNoTracking().AnyAsync(where);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<T, bool>> where = null)
+        {
+            if (where != null)
+            {
+                return await _model.AsNoTracking().Where(where).CountAsync();
+            }
+            return await _model.AsNoTracking().CountAsync();
         }
 
         public async Task<bool> DeleteAsync(params object[] keys)

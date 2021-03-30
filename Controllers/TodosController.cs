@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApiRest.Models;
 using WebApiRest.Repositories;
@@ -10,6 +11,7 @@ namespace WebApiRest.Controllers
     [ApiController]
     [Route("api/v1/[controller]")]
     [Produces("application/json")]
+    [Authorize]
     public class TodosController : ControllerBase
     {
         private readonly TodoRepositoryAbstract _repository;
@@ -32,7 +34,7 @@ namespace WebApiRest.Controllers
             {
                 return Ok(model);
             }
-            return NotFound(new {Status = "Not Found", Id = id});
+            return NotFound(new { Status = "Not Found", Id = id });
         }
 
         [HttpPost()]
@@ -41,7 +43,7 @@ namespace WebApiRest.Controllers
             if (ModelState.IsValid)
             {
                 var model = await _repository.AddAsync(todo);
-                return CreatedAtAction(nameof(GetTodo), new {todo.Id}, todo);
+                return CreatedAtAction(nameof(GetTodo), new { todo.Id }, todo);
             }
             return BadRequest(ModelState);
         }
@@ -52,8 +54,8 @@ namespace WebApiRest.Controllers
             if (id != todo.Id)
             {
                 ModelState.AddModelError("Todo.Id", "Id != Todo.Id");
-            } 
-            else 
+            }
+            else
             {
                 if (ModelState.IsValid)
                 {
@@ -74,10 +76,10 @@ namespace WebApiRest.Controllers
             {
                 if (await _repository.DeleteAsync(model))
                 {
-                    return Ok(new {Status = "Successfully deleted"});
+                    return Ok(new { Status = "Successfully deleted" });
                 }
             }
-            return NotFound(new {Status = "Not Found", Id = id});
+            return NotFound(new { Status = "Not Found", Id = id });
         }
     }
 }

@@ -16,11 +16,10 @@ namespace WebApiRest.Models.Mappings
             builder.Property(x => x.Description)
                 .HasColumnName("description")
                 .HasMaxLength(100)
-                .IsRequired();               
+                .IsRequired();
 
             builder.Property(x => x.Done)
-                .HasColumnName("done") 
-                .HasDefaultValue(true)
+                .HasColumnName("done")
                 .IsRequired();
         }
     }
