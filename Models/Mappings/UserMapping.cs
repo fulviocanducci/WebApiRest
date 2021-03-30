@@ -24,6 +24,9 @@ namespace WebApiRest.Models.Mappings
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder.HasAlternateKey(x => x.Email)
+                .HasName("ix_unique_email");
+
             builder.Property(x => x.Password)
                 .HasColumnName("password")
                 .IsRequired()

@@ -1,16 +1,16 @@
-using System.Threading.Tasks;
+using Canducci.GeneratePassword;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using WebApiRest.Models;
 using WebApiRest.Repositories;
-using Canducci.GeneratePassword;
 using WebApiRest.Services;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebApiRest.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Produces("application/json")]    
+    [Produces("application/json")]
     public class LoginController : ControllerBase
     {
         private readonly UserRepositoryAbstract _repository;
