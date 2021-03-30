@@ -10,8 +10,7 @@ namespace WebApiRest.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Produces("application/json")]
-    [AllowAnonymous]
+    [Produces("application/json")]    
     public class LoginController : ControllerBase
     {
         private readonly UserRepositoryAbstract _repository;
@@ -24,7 +23,15 @@ namespace WebApiRest.Controllers
             _token = token;
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> GetAsync()
+        {
+            return Ok(await _repository.GetUserByEmailAsync(User.Identity.Name));
+        }
+
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult> PostAsync(Login model)
         {
             await CreateUserDefault();
@@ -50,6 +57,7 @@ namespace WebApiRest.Controllers
             });
         }
 
+        [NonAction]
         private async Task CreateUserDefault()
         {
             if (await _repository.CountAsync() == 0)
